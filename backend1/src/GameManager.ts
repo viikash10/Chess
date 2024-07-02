@@ -23,30 +23,61 @@ import { Game } from './Game';
         // Optionally, handle stopping the game here if necessary
     }
 
-    private addHandler(socket: WebSocket): void {
-        socket.on("message", (data) => {
-            const message = JSON.parse(data.toString());
+    // private addHandler(socket: WebSocket): void {
+    //     socket.on("message", (data) => {
+    //         const message = JSON.parse(data.toString());
+    //         if (message.type === INIT_GAME) {
+    //             if (this.pendingUser) {
+    //                 const game = new Game(this.pendingUser, socket) ;
+    //                 this.games.push(game) ;
+    //                 this.pendingUser = null ;
+                    
+    //             } else {
+    //                 this.pendingUser = socket;
+    //             }
+    //         }
+    //         if(message.type === MOVE){
+    //             console.log("inside move");
+    //             const game = this.games.find(game => game.player1 === socket || game.player2 === socket) ;
+    //             console.log(game) ;
+    //             if(game){
+    //                 console.log("inside make move") ;
+    //                 game.makeMove(socket, message.move);
+    //             }
+              
+    //         }
+    //     });
+    // }
+
+    // In GameManager.ts, modify the addHandler method to include error handling
+private addHandler(socket: WebSocket): void {
+    socket.on("message", (data) => {
+        const message = JSON.parse(data.toString());
+        
+        try {
             if (message.type === INIT_GAME) {
                 if (this.pendingUser) {
-                    const game = new Game(this.pendingUser, socket) ;
-                    this.games.push(game) ;
-                    this.pendingUser = null ;
-                    
+                    const game = new Game(this.pendingUser, socket);
+                    this.games.push(game);
+                    this.pendingUser = null;
                 } else {
                     this.pendingUser = socket;
                 }
             }
-            if(message.type === MOVE){
-                console.log("inside move");
-                const game = this.games.find(game => game.player1 === socket || game.player2 === socket) ;
-                if(game){
-                    console.log("inside make move") ;
-                    game.makeMove(socket, message.move);
+            if (message.type === MOVE) {
+                const game = this.games.find(game => game.player1 === socket || game.player2 === socket);
+                if (game) {
+                    game.makeMove(socket, message.move).catch(error => {
+                        console.error(`Failed to make move: ${error}`);
+                    });
                 }
-              
             }
-        });
-    }
+        } catch (error) {
+            console.error(`Error processing message: ${error}`);
+        }
+    });
+}
+
 
 }
 
