@@ -87,7 +87,8 @@ class Game {
         return new Promise((resolve, reject) => {
             try {
                 // Your existing logic here...
-                console.log(this.moveCount);
+                // console.log(this.moveCount) ;
+                console.log(move);
                 if (this.moveCount % 2 === 0 && socket !== this.player1) {
                     console.log("Early Return 1");
                     return;
@@ -120,7 +121,7 @@ class Game {
                     }));
                     return;
                 }
-                console.log(this.moveCount);
+                // console.log(this.moveCount) ;
                 if (this.moveCount === 0) {
                     console.log("sent 1");
                     this.player2.send(JSON.stringify({

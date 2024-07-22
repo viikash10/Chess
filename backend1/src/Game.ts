@@ -98,6 +98,7 @@ makeMove(socket: WebSocket, move: {
         try {
             // Your existing logic here...
             // console.log(this.moveCount) ;
+            console.log(move) ;
             if(this.moveCount%2 === 0 && socket !== this.player1)
                     {
                         console.log("Early Return 1") ;

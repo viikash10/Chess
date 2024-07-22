@@ -57,7 +57,7 @@ class GameManager {
                 if (message.type === messages_1.MOVE) {
                     const game = this.games.find(game => game.player1 === socket || game.player2 === socket);
                     if (game) {
-                        game.makeMove(socket, message.move).catch(error => {
+                        game.makeMove(socket, message.payload.move).catch(error => {
                             console.error(`Failed to make move: ${error}`);
                         });
                     }
